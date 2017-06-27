@@ -22,10 +22,6 @@ Gets a page with feedbacks that satisfy specified criteria
 
 A connection object
 
-.PARAMETER Name
-
-A name to refer to the client facade
-
 .PARAMETER Method
 
 An operation method (default: 'Get')
@@ -52,8 +48,7 @@ A include total count (default: false)
 
 .EXAMPLE
 
-# Read top 10 feedbacks from test cluster that contain 'abc' string
-PS> Get-PipFeedbacks -Name "test" -Filter @{ tags="goals,success" } -Take 10
+Get-PipFeedbacks -Filter @{ tags="goals,success" } -Take 10
 
 #>
     [CmdletBinding()]
@@ -61,8 +56,6 @@ PS> Get-PipFeedbacks -Name "test" -Filter @{ tags="goals,success" } -Take 10
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Get",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -88,7 +81,7 @@ PS> Get-PipFeedbacks -Name "test" -Filter @{ tags="goals,success" } -Take 10
             total = $Total
         }
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route -Params $params
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route -Params $params
 
         Write-Output $result.Data
     }
@@ -111,10 +104,6 @@ Gets feedback by its unique id
 
 A connection object
 
-.PARAMETER Name
-
-A name to refer to the client facade
-
 .PARAMETER Method
 
 An operation method (default: 'Get')
@@ -129,8 +118,7 @@ A feedback id
 
 .EXAMPLE
 
-# Gets feedback with id 1232
-PS> Get-PipFeedback -Name "test" -Id 123
+Get-PipFeedback -Id 123
 
 #>
     [CmdletBinding()]
@@ -138,8 +126,6 @@ PS> Get-PipFeedback -Name "test" -Id 123
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Get",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -152,7 +138,7 @@ PS> Get-PipFeedback -Name "test" -Id 123
     {
         $route = $Uri -f $Id
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route
         
         Write-Output $result
     }
@@ -174,10 +160,6 @@ Sends a new feedback
 .PARAMETER Connection
 
 A connection object
-
-.PARAMETER Name
-
-A name to refer to the client facade
 
 .PARAMETER Method
 
@@ -213,8 +195,7 @@ A feedback with the following structure:
 
 .EXAMPLE
 
-# Creates a new feedback
-PS> Send-PipFeedback -Name "test" -Feedback @{ category="feature request"; app="myapp"; title="I propose an idea"; content="Add somethign cool to your product" }
+Send-PipFeedback -Feedback @{ category="feature request"; app="myapp"; title="I propose an idea"; content="Add somethign cool to your product" }
 
 #>
     [CmdletBinding()]
@@ -222,8 +203,6 @@ PS> Send-PipFeedback -Name "test" -Feedback @{ category="feature request"; app="
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Post",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -236,7 +215,7 @@ PS> Send-PipFeedback -Name "test" -Feedback @{ category="feature request"; app="
     {
         $route = $Uri
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route -Request $Feedback
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route -Request $Feedback
         
         Write-Output $result
     }
@@ -259,10 +238,6 @@ Resoles feedback
 
 A connection object
 
-.PARAMETER Name
-
-A name to refer to the client facade
-
 .PARAMETER Method
 
 An operation method (default: 'Put')
@@ -281,8 +256,7 @@ A rely text
 
 .EXAMPLE
 
-# Replies feedback 123
-PS> Resolve-PipFeedback -Name "test" -Id 123 -Reply "Thanks for your feedback and see you later!"
+Resolve-PipFeedback -Id 123 -Reply "Thanks for your feedback and see you later!"
 
 #>
     [CmdletBinding()]
@@ -290,8 +264,6 @@ PS> Resolve-PipFeedback -Name "test" -Id 123 -Reply "Thanks for your feedback an
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Put",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -306,7 +278,7 @@ PS> Resolve-PipFeedback -Name "test" -Id 123 -Reply "Thanks for your feedback an
     {
         $route = $Uri -f $Id
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route -Request $Reply
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route -Request $Reply
         
         Write-Output $result
     }
@@ -329,10 +301,6 @@ Removes feedback by its unique id
 
 A connection object
 
-.PARAMETER Name
-
-A name to refer to the client facade
-
 .PARAMETER Method
 
 An operation method (default: 'Delete')
@@ -347,8 +315,7 @@ A feedback id
 
 .EXAMPLE
 
-# Delete feedback with id 1232
-PS> Remove-PipFeedback -Name "test" -Id 123
+Remove-PipFeedback -Id 123
 
 #>
     [CmdletBinding()]
@@ -356,8 +323,6 @@ PS> Remove-PipFeedback -Name "test" -Id 123
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Delete",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -370,7 +335,7 @@ PS> Remove-PipFeedback -Name "test" -Id 123
     {
         $route = $Uri -f $Id
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route
         
         Write-Output $result
     }

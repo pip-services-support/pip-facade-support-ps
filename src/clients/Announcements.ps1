@@ -22,10 +22,6 @@ Gets a page with announcements that satisfy specified criteria
 
 A connection object
 
-.PARAMETER Name
-
-A name to refer to the client facade
-
 .PARAMETER Method
 
 An operation method (default: 'Get')
@@ -52,8 +48,7 @@ A include total count (default: false)
 
 .EXAMPLE
 
-# Read top 10 announcements from test cluster that contain 'abc' string
-PS> Get-PipAnnouncements -Name "test" -Filter @{ tags="goals,success" } -Take 10
+Get-PipAnnouncements -Filter @{ tags="goals,success" } -Take 10
 
 #>
     [CmdletBinding()]
@@ -61,8 +56,6 @@ PS> Get-PipAnnouncements -Name "test" -Filter @{ tags="goals,success" } -Take 10
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Get",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -88,7 +81,7 @@ PS> Get-PipAnnouncements -Name "test" -Filter @{ tags="goals,success" } -Take 10
             total = $Total
         }
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route -Params $params
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route -Params $params
 
         Write-Output $result.Data
     }
@@ -111,10 +104,6 @@ Gets announcement by its unique id
 
 A connection object
 
-.PARAMETER Name
-
-A name to refer to the client facade
-
 .PARAMETER Method
 
 An operation method (default: 'Get')
@@ -129,8 +118,7 @@ A announcement id
 
 .EXAMPLE
 
-# Gets announcement with id 1232
-PS> Get-PipAnnouncement -Name "test" -Id 123
+Get-PipAnnouncement -Id 123
 
 #>
     [CmdletBinding()]
@@ -138,8 +126,6 @@ PS> Get-PipAnnouncement -Name "test" -Id 123
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Get",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -152,7 +138,7 @@ PS> Get-PipAnnouncement -Name "test" -Id 123
     {
         $route = $Uri -f $Id
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route
         
         Write-Output $result
     }
@@ -175,10 +161,6 @@ Gets a random announcement
 
 A connection object
 
-.PARAMETER Name
-
-A name to refer to the client facade
-
 .PARAMETER Method
 
 An operation method (default: 'Get')
@@ -193,8 +175,7 @@ A filter with search criteria (default: no filter)
 
 .EXAMPLE
 
-# Gets a random
-PS> Get-PipRandomAnnouncement -Name "test"
+Get-PipRandomAnnouncement
 
 #>
     [CmdletBinding()]
@@ -202,8 +183,6 @@ PS> Get-PipRandomAnnouncement -Name "test"
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Get",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -217,7 +196,7 @@ PS> Get-PipRandomAnnouncement -Name "test"
         $route = $Uri
         $params = $Filter
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route -Params $params
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route -Params $params
         
         Write-Output $result
     }
@@ -239,10 +218,6 @@ Creates a new announcement
 .PARAMETER Connection
 
 A connection object
-
-.PARAMETER Name
-
-A name to refer to the client facade
 
 .PARAMETER Method
 
@@ -280,8 +255,7 @@ A announcement with the following structure:
 
 .EXAMPLE
 
-# Creates a new announcement
-PS> New-PipAnnouncement -Name "test" -Announcement @{ text=@{ en="Hurry slowly" }; author=@{ en="Russian proverb" }; status="completed" }
+New-PipAnnouncement -Announcement @{ text=@{ en="Hurry slowly" }; author=@{ en="Russian proverb" }; status="completed" }
 
 #>
     [CmdletBinding()]
@@ -289,8 +263,6 @@ PS> New-PipAnnouncement -Name "test" -Announcement @{ text=@{ en="Hurry slowly" 
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Post",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -303,7 +275,7 @@ PS> New-PipAnnouncement -Name "test" -Announcement @{ text=@{ en="Hurry slowly" 
     {
         $route = $Uri
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route -Request $Announcement
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route -Request $Announcement
         
         Write-Output $result
     }
@@ -325,10 +297,6 @@ Creates a new announcement
 .PARAMETER Connection
 
 A connection object
-
-.PARAMETER Name
-
-A name to refer to the client facade
 
 .PARAMETER Method
 
@@ -367,8 +335,7 @@ A announcement with the following structure:
 
 .EXAMPLE
 
-# Update existing announcement
-PS> Update-PipAnnouncement -Name "test" -Announcement @{ text=@{ en="Hurry slowly" }; author=@{ en="Russian proverb" }; status="completed" }
+Update-PipAnnouncement -Announcement @{ text=@{ en="Hurry slowly" }; author=@{ en="Russian proverb" }; status="completed" }
 
 #>
     [CmdletBinding()]
@@ -376,8 +343,6 @@ PS> Update-PipAnnouncement -Name "test" -Announcement @{ text=@{ en="Hurry slowl
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Put",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -390,7 +355,7 @@ PS> Update-PipAnnouncement -Name "test" -Announcement @{ text=@{ en="Hurry slowl
     {
         $route = $Uri -f $Announcement.id
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route -Request $Announcement
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route -Request $Announcement
         
         Write-Output $result
     }
@@ -413,10 +378,6 @@ Removes announcement by its unique id
 
 A connection object
 
-.PARAMETER Name
-
-A name to refer to the client facade
-
 .PARAMETER Method
 
 An operation method (default: 'Delete')
@@ -431,8 +392,7 @@ A announcement id
 
 .EXAMPLE
 
-# Delete announcement with id 1232
-PS> Remove-PipAnnouncement -Name "test" -Id 123
+Remove-PipAnnouncement -Id 123
 
 #>
     [CmdletBinding()]
@@ -440,8 +400,6 @@ PS> Remove-PipAnnouncement -Name "test" -Id 123
     (
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [Hashtable] $Connection,
-        [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
-        [string] $Name,
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
         [string] $Method = "Delete",
         [Parameter(Mandatory=$false, ValueFromPipelineByPropertyName=$true)]
@@ -454,7 +412,7 @@ PS> Remove-PipAnnouncement -Name "test" -Id 123
     {
         $route = $Uri -f $Id
 
-        $result = Invoke-PipFacade -Connection $Connection -Name $Name -Method $Method -Route $route
+        $result = Invoke-PipFacade -Connection $Connection -Method $Method -Route $route
         
         Write-Output $result
     }
